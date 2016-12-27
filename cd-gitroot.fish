@@ -27,10 +27,6 @@ end
 function __cdgitroot_complete
     set directories
     set root_path (git rev-parse --show-toplevel)
-    if test $status -ne 0
-        return 1
-    end
-
     set dirs \
         (find $root_path -type d -name '.git' -prune -o -type d -print | \
                 sed "s#$root_path/##g" | sed "s#$root_path##g")
