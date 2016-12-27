@@ -24,3 +24,13 @@ function cd-gitroot -d 'Jump to git repo\'s root'
     end
 end
 
+function __cdgitroot_complete
+    set directories
+    set root_path (git rev-parse --show-toplevel)
+    set dirs \
+        (find $root_path -type d -name '.git' -prune -o -type d -print | \
+                sed "s#$root_path/##g" | sed "s#$root_path##g")
+    complete -c cd-gitroot --no-files -d 'path' -a "$dirs"
+end
+__cdgitroot_complete
+
