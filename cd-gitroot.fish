@@ -11,6 +11,16 @@ function cd-gitroot -d 'Jump to git repo\'s root'
         return 1
     end
 
+    set root_path (git rev-parse --show-toplevel)
+    set argc (count $argv)
 
+    if test (count $argv) -eq 0
+        cd $root_path
+    else if test (count $argv) -eq 1; and test -n $relative_path
+        set relative_path $argv
+        cd "$root_path/$relative_path"
+    else
+        __cdgitroot_usage
+    end
 end
 
