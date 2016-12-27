@@ -1,2 +1,2 @@
 # cd-gitroot-fish
-cd-gitroot for fish
+[mollifier/cd-gitroot](https://github.com/mollifier/cd-gitroot) for fish version.
