@@ -6,7 +6,7 @@ function __cdgitroot_usage
 end
 
 function cd-gitroot -d 'Jump to git repo\'s root'
-    if not command git rev-parse --git-dir > /dev/null ^ /dev/null
+    if not __cdgitroot_in_repo
         echo 'It\'s out of working tree!' 1>&2
         return 1
     end
@@ -25,12 +25,15 @@ function cd-gitroot -d 'Jump to git repo\'s root'
 end
 
 function __cdgitroot_complete
-    set directories
     set root_path (git rev-parse --show-toplevel)
-    set dirs \
-        (find $root_path -type d -name '.git' -prune -o -type d -print | \
-                sed "s#$root_path/##g" | sed "s#$root_path##g")
-    complete -c cd-gitroot --no-files -d 'path' -a "$dirs"
+    command find $root_path -type d -name '.git' -prune -o -type d -print \
+            | sed "s#$root_path/##g" | sed "s#$root_path##g"
 end
-__cdgitroot_complete
+
+function __cdgitroot_in_repo
+    command git rev-parse --git-dir > /dev/null ^ /dev/null
+    return $status
+end
+
+complete -c cd-gitroot --no-files -d 'path' --condition __cdgitroot_in_repo -a '(__cdgitroot_complete)'
 
